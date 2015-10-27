@@ -18,3 +18,5 @@ firmware_vector:
 	b	uart_init
 	b	uart_enable
 	b	uart_spin_puts
+	b	uart_spin_puthex
+	b	uart_spin_puthex_ptr

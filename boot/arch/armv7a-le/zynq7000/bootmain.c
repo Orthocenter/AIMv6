@@ -15,10 +15,32 @@
 void (*uart_init)(void) = (void *)(PRELOAD_VECTOR_BASE + 0x4);
 void (*uart_enable)(void) = (void *)(PRELOAD_VECTOR_BASE + 0x8);
 void (*uart_spin_puts)(const char *) = (void *)(PRELOAD_VECTOR_BASE + 0xC);
+void (*uart_spin_puthex)(u32) = (void *)(PRELOAD_VECTOR_BASE + 0x10);
+void (*uart_spin_puthex_ptr)(u8 *) = (void *)(PRELOAD_VECTOR_BASE + 0X14);
 
-void mbr_bootmain(void)
-{
-	uart_spin_puts("Hello, AIMv6!\r\n");
-	while(1);
+void bootloader() {
+	uart_spin_puts("bootloader started! \r\n");
+        volatile u8 *mbr = (void *)0x100000;
+        volatile u8 *partition2_entry = mbr + 462;
+        u8 *elf_lba = partition2_entry + 0x8;
+        u8 *partition2_length = partition2_entry + 0xC;
+
+#ifdef DEBUG
+	uart_spin_puts("address of elf_lba: ");
+	uart_spin_puthex(elf_lba);
+	uart_spin_puts("\r\n");
+
+        uart_spin_puts("lba of elf: ");
+	uart_spin_puthex_ptr(elf_lba);
+	uart_spin_puts("\r\n");
+
+	uart_spin_puts("address of partition2_length: ");
+	uart_spin_puthex(partition2_length);
+	uart_spin_puts("\r\n");
+
+        uart_spin_puts("length of partition2: ");
+	uart_spin_puthex_ptr(partition2_length);
+	uart_spin_puts("\r\n");
+#endif
 }
 
