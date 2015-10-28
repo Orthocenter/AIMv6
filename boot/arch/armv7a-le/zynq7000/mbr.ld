@@ -4,7 +4,7 @@ MEMORY
 {
 	MBR (rwx) :
 		ORIGIN = 1M,
-		LENGTH = 512
+		LENGTH = 446
 }
 
 SECTIONS

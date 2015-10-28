@@ -30,16 +30,3 @@ void uart_spin_puthex(u32 num)
 	uart_spin_puts("0x");
     uart_spin_puts(buf);
 }
-
-void uart_spin_puthex_ptr(u8 *ptr)
-{
-	//u32 num = (u32)ptr[3] << 24 | (u32)ptr[2] << 16 | (u32)ptr[1] << 8 | ptr[0];
-	u32 num = ptr[3];
-	num <<= 8;
-	num |= ptr[2];
-	num <<= 8;
-	num |= ptr[1];
-	num <<= 8;
-	num |= ptr[0];
-	uart_spin_puthex(num);
-}

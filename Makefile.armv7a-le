@@ -35,6 +35,7 @@ LDFLAGS		=  -EL -O -N
 FIRMWARE_OBJS	=  firmware/arch/$(ARCH)/vector.o \
 		   firmware/arch/$(ARCH)/bootasm.o \
 		   firmware/arch/$(ARCH)/bootmain.o \
+		   drivers/u32/u32.o \
 		   drivers/serial/uart-zynq7000.o \
 		   drivers/serial/uart.o \
 		   drivers/clock/gtc-a9mpcore.o \
@@ -46,7 +47,9 @@ FIRMWARE_M4	=  firmware/arch/$(ARCH)/firmware.m4 \
 
 MBR_OBJS	=  boot/arch/$(ARCH)/$(MACH)/bootmain.o
 
-all: firmware.bin mbr.bin
+FUN_OBJS	=  fun/hello.o
+
+all: firmware.bin mbr.bin fun.bin
 
 $(FIRMWARE_OBJS): EXTRA_CFLAGS = -O2
 
@@ -63,10 +66,14 @@ $(MBR_OBJS): EXTRA_CFLAGS := -Os
 mbr.elf: $(MBR_OBJS) boot/arch/$(ARCH)/$(MACH)/mbr.ld
 	$(LD) $(LDFLAGS) -T boot/arch/$(ARCH)/$(MACH)/mbr.ld -o $@ $^
 
+fun.elf: $(FUN_OBJS) fun/hello.ld
+	$(LD) $(LDFLAGS) -T fun/hello.ld -o $@ $^
+
 clean:
 	rm -f firmware.ld
 	rm -rf $(FIRMWARE_OBJS) firmware.elf firmware.bin firmware.s
 	rm -rf $(MBR_OBJS) mbr.elf mbr.bin mbr.s
+	rm -rf $(FUN_OBJS) fun.elf fun.bin fun.s
 
 .S.o:
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ -c $<

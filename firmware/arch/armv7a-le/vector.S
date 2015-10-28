@@ -19,4 +19,5 @@ firmware_vector:
 	b	uart_enable
 	b	uart_spin_puts
 	b	uart_spin_puthex
-	b	uart_spin_puthex_ptr
+	b	load_u32
+	b	sd_dma_spin_read
