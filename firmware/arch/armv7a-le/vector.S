@@ -20,4 +20,4 @@ firmware_vector:
 	b	uart_spin_puts
 	b	uart_spin_puthex
 	b	load_u32
-	b	sd_dma_spin_read
+    b   run_elf

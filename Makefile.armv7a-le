@@ -39,7 +39,8 @@ FIRMWARE_OBJS	=  firmware/arch/$(ARCH)/vector.o \
 		   drivers/serial/uart-zynq7000.o \
 		   drivers/serial/uart.o \
 		   drivers/clock/gtc-a9mpcore.o \
-		   drivers/sd/sd-zynq7000.o
+		   drivers/sd/sd-zynq7000.o \
+           drivers/sd/run-elf.o
 
 FIRMWARE_M4	=  firmware/arch/$(ARCH)/firmware.m4 \
 		   firmware/arch/$(ARCH)/$(MACH)/chip.m4 \
