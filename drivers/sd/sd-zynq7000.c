@@ -255,7 +255,7 @@ int sd_spin_init_mem_card()
  * -2 = error sending CMD18
  * -3 = error during DMA transfer
  */
-int _sd_dma_spin_read(u32 pa, u16 count, u32 offset)
+int sd_dma_spin_read(u32 pa, u16 count, u32 offset)
 {
 	int ret;
 	u16 state16;
@@ -277,52 +277,14 @@ int _sd_dma_spin_read(u32 pa, u16 count, u32 offset)
 				SD_ERR_INTR_ALL);
 			return -3;
 		}
+        if (state16 & SD_INTR_DMA) {
+            out16(SD_BASE + SD_ERR_INTR_STS_OFFSET, SD_INTR_DMA);
+            out32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET, in32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET));
+        }
 	} while (!(state16 & SD_INTR_TC));
 	/* clean up */
 	out16(SD_BASE + SD_NORM_INTR_STS_OFFSET, SD_INTR_TC);
 	return 0;
-}
-
-int _sd_dma_spin_read_page(u32 *pa, u16 *count, u32 *offset, u16 remain)
-{
-    int ret = 0;
-    if(*count <= remain) {
-        ret = _sd_dma_spin_read(*pa, *count, *offset);
-        *pa += (u32)count << 9;
-        *offset += count;
-        *count = 0;
-    } else {
-        ret = _sd_dma_spin_read(*pa, remain, *offset);
-        *pa += (u32)remain << 9;
-        *offset += remain;
-        *count -= remain;
-    }
-    return ret;
-}
-
-/* suppose pa % 512 == 0*/
-/* return values:
-   -3 ~ 0 are same as _sd_dma_spin_read()
-   -4 = pa % 512 != 0
-*/
-int sd_dma_spin_read(u32 pa, u16 count, u32 offset)
-{
-    if(pa & 0x1ff) return -4;
-
-    // first page
-    int remain = 0x8 - ((pa >> 9) & 0x7);
-    int ret = 0;
-    ret = _sd_dma_spin_read_page(&pa, &count, &offset, remain);
-    if(ret) return ret;
-
-    // rest page
-    while(count) {
-        ret = _sd_dma_spin_read_page(&pa, &count, &offset, 8);
-
-        if(ret) return ret;
-    }
-    
-    return ret;
 }
 
 /*
@@ -369,6 +331,10 @@ int sd_dma_spin_write(u32 pa, u16 count, u32 offset)
 				SD_ERR_INTR_ALL);
 			return -3;
 		}
+        if (state16 & SD_INTR_DMA) {
+            out16(SD_BASE + SD_ERR_INTR_STS_OFFSET, SD_INTR_DMA);
+            out32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET, in32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET));
+        }
 	} while (!(state16 & SD_INTR_TC));
 	/* clean up */
 	out16(SD_BASE + SD_NORM_INTR_STS_OFFSET, SD_INTR_TC);
