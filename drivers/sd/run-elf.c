@@ -62,7 +62,7 @@ void run_elf(u32 elf_lba) {
         //if(p_filesz > 512 && end_of_p & mask8 != mask8) { //not work
         if(p_filesz > 512 && (end_of_p & mask8) != mask8) {
             sd_dma_spin_read(buffer, 1, p_lba);
-            for(int j = 0; j < end_of_p & mask8; j++) {
+            for(int j = 0; j < (end_of_p & mask8); j++) {
                 *(p_paddr++) = buffer[j];
             }
         }
