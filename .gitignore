@@ -1,1 +1,10 @@
+# ignore all
+*.*
+# unignore all with extensions
+!*.*
+
 *.swp
+*.bin
+*.elf
+*.o
+
