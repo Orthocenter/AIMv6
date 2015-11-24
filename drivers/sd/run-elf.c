@@ -68,5 +68,6 @@ void run_elf(u32 elf_lba) {
         }
     }
 
-    kernel_entry();
+	uart_spin_puts("MBR: ELF loaded, entering kernel now!\r\n");
+	kernel_entry();
 }
