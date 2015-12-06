@@ -46,7 +46,7 @@ void init_cpu() {
 
 	// 3.
 	uart_spin_puts("CPU: enabling l1 cache\r\n");
-	//enable_l1cache();
+	enable_l1cache();
 
 	uart_spin_puts("CPU: Trying to write to ");
 	u32 *test = KERN_STACK;
