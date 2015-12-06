@@ -7,9 +7,9 @@
  * 2M		..  2M+16M		kernel
  * 18M-18K	..  18M			l1 page table of kernel
  *
- * 18M		..	512M-16M	free space
+ * 18M		..	511M-16M	free space
  *
- * 512M-16M	..	512M		kernel stack
+ * 511M-16M	..	511M		kernel stack
  */
 
 /* Virtual memeory space layout
@@ -29,8 +29,8 @@
 #define KERN_TTB_BASE 0x80FFC000 // kernel tranlation table base: 2G+16M-16K
 #define KERN_TTB_BASE_PHY 0x011FC000 // kernel ttb physical address: 18M-16K
 
-#define KERN_STACK 0xDFFFFFFF // kernel stack: 4G-512M -> 4G-512M-16M
-#define KERN_STACK_PHY 0x1FEFFFFF // kernel stack physical address: 511M
+#define KERN_STACK 0xDFFFFFFC // kernel stack: 4G-512M -> 4G-512M-16M
+#define KERN_STACK_PHY 0x1FEFFFFC // kernel stack physical address: 511M
 #define KERN_STACK_SIZE 16 // 16M
 
 #define FREE_MEM_PHY_ST 0x01200000 // free physical memory start address

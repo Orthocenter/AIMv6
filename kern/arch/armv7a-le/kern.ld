@@ -11,7 +11,7 @@ SECTIONS
 		drivers/serial/uart-zynq7000.o
 	}
 	
-	high 2048M : AT( ADDR(low) + SIZEOF(low) ) {
+	high (2048M + SIZEOF(low)) : AT( ADDR(low) + SIZEOF(low) ) {
 		*.o
 	}
 }
