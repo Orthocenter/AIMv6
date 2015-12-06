@@ -71,6 +71,8 @@ void* alloc_aligned_pages(u32 num, u32 aligned) {
 		// todo: initialization?
 		return addr_st;
 	}
+
+	return NULL;
 }
 
 void free_pages(void *addr, u32 num) {
