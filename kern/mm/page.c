@@ -1,4 +1,5 @@
 #include "page.h"
+#include <drivers/serial/uart.h>
 
 void init_pages() {
 	mblock_t *first_block = (mblock_t*)(KERN_BASE + FREE_MEM_PHY_ST);
@@ -69,8 +70,19 @@ void* alloc_aligned_pages(u32 num, u32 aligned) {
 		}
 
 		// todo: initialization?
+#ifdef DEBUG
+		uart_spin_puts("MM/page: allocated ");
+		uart_spin_puthex_no_newline(num);
+		uart_spin_puts(" pages at ");
+		uart_spin_puthex(addr_st);
+#endif //DEBUG
 		return addr_st;
 	}
+
+#ifdef DEBUG
+		uart_spin_puts("MM/page: allocation failed: number of free pages is smaller than ");
+		uart_spin_puthex(num);
+#endif //DEBUG
 
 	return NULL;
 }
@@ -105,4 +117,11 @@ void free_pages(void *addr, u32 num) {
 		new_block->size += new_block->next->size;
 		new_block->next = new_block->next->next;
 	}
+
+#ifdef DEBUG
+	uart_spin_puts("MM/page: freed ");
+	uart_spin_puthex_no_newline(num);
+	uart_spin_puts(" pages at ");
+	uart_spin_puthex(addr);
+#endif //DEBUG
 }

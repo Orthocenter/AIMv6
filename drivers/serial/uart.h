@@ -23,6 +23,7 @@
 
 void uart_spin_puts(const char *str);
 void uart_spin_puthex(u32);
+void uart_spin_puthex_no_newline(u32);
 ssize_t uart_spin_printf(const char *fmt, ...);
 ssize_t uart_spin_vprintf(const char *fmt, va_list ap);
 

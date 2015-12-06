@@ -21,9 +21,15 @@ void uart_spin_puts(const char *str)
 
 void uart_spin_puthex(u32 num)
 {
+	uart_spin_puthex_no_newline(num);
+	uart_spin_puts("\r\n");
+}
+
+void uart_spin_puthex_no_newline(u32 num)
+{
     int i;
     const char table[] = "0123456789ABCDEF";
-    char buf[11] = "00000000\r\n";
+    char buf[11] = "00000000\0";
     for (i = 28; i >= 0; i -= 4){
         buf[(28 - i) >> 2] = table[(num >> i) & 0xF];
     }
