@@ -65,7 +65,7 @@ void page_test() {
 
 	uart_spin_puts("MM/page: test no enough pages\r\n");
 	u32 size_too_many = original_size + 1;
-	uart_spin_puts("MM/page: test allocated no pages: ");
+	uart_spin_puts("MM/page: test allocated too many pages: ");
 	expect(alloc_pages(size_too_many), NULL);
 	uart_spin_puts("MM/page: test if there are any side effects: ");
 	expect(freelist && freelist->size == original_size && (freelist->next == NULL), true);

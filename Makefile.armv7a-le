@@ -57,6 +57,8 @@ KERN_OBJS	=  kern/arch/$(ARCH)/init/cpu.o \
 			   kern/init/main.o \
 			   kern/mm/page.o \
 			   kern/mm/page_test.o \
+			   kern/mm/slab.o \
+			   kern/mm/slab_test.o \
 			   kern/test/test.o
 
 all: firmware.bin mbr.bin kern.bin

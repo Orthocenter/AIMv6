@@ -11,14 +11,18 @@
 #include <drivers/serial/uart.h>
 #include "kern/mm/page.h"
 #include "kern/mm/page_test.h"
+#include "kern/mm/slab.h"
+#include "kern/mm/slab_test.h"
 
 int start_kernel(void)
 {
 	uart_spin_puts("Hello from kernel!\r\n");
 	
 	init_pages();
-
 	page_test();
+
+	init_slabs();
+	slab_test();
 
 	while(1);
 }
