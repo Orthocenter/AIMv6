@@ -15,8 +15,8 @@ void prepare_first_page_table() {
 	u32 *TTB = (u32*)KERN_TTB_BASE_PHY;
 
 	// directly map
-	uart_spin_puts("MMU: directly mapping 0 -> 512M\r\n");
-	for (u32 i = 0; i < 512; i++) {
+	uart_spin_puts("MMU: directly mapping\r\n");
+	for (u32 i = 0; i < MEM_SIZE; i++) {
 		set_L1_PT_sec(TTB+i, i, KERN_ATTR);
 	}
 	// device
@@ -30,23 +30,27 @@ void prepare_first_page_table() {
 		u32 *entry = TTB + ((KERN_STACK - (i << 20)) >> 20);
 		u32 *phy = (KERN_STACK_PHY - (i << 20)) >> 20;
 
+#ifdef DEBUG
 		uart_spin_puts("mapping ");
 		uart_spin_puthex((KERN_STACK - (i << 20)) >> 20);
 		uart_spin_puts("to ");
 		uart_spin_puthex(phy);
+#endif // DEBUG
 
 		set_L1_PT_sec(entry, phy, KERN_ATTR);
 	}
 	// kern
-	uart_spin_puts("MMU: mapping kernel\r\n");
-	for (u32 i = 0; i < KERN_SIZE; i++) {
+	uart_spin_puts("MMU: mapping KERN_BASE + phy -> phy\r\n");
+	for (u32 i = 0; i < MEM_SIZE; i++) {
 		u32 *entry = TTB + ((KERN_BASE + (i << 20)) >> 20);
 		u32 *phy = (KERN_BASE_PHY + (i << 20)) >> 20;
 
+#ifdef DEBUG
 		uart_spin_puts("mapping ");
 		uart_spin_puthex((KERN_BASE + (i << 20)) >> 20);
 		uart_spin_puts("to ");
 		uart_spin_puthex(phy);
+#endif // DEBUG
 
 		set_L1_PT_sec(entry, phy, KERN_ATTR);
 	}

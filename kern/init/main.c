@@ -8,13 +8,18 @@
  *
  */
 
-//#include <drivers/serial/uart.h>
+#include <drivers/serial/uart.h>
+#include "kern/mm/page.h"
+#include "kern/mm/page_test.h"
 
 int start_kernel(void)
 {
 	uart_spin_puts("Hello from kernel!\r\n");
-	void (*puts)(const char *) = (void *)(0x1ff0000c);
-	puts("kernel at high memory address space");
+	
+	init_pages();
+
+	page_test();
+
 	while(1);
 }
 

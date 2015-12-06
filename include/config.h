@@ -21,4 +21,6 @@
 /* Other global configuration macros goes below. */
 #define DEBUG			/* enable pdebug() output */
 
+#define NULL 0
+
 #endif

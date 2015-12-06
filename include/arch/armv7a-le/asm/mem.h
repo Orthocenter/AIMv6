@@ -21,6 +21,7 @@
  * 4G-512M	..	4G			Device
  */
 
+#define MEM_SIZE 512 //memory size 512M
 
 #define KERN_BASE 0x80000000 // kernel: 2G -> 2G+16M
 #define KERN_BASE_PHY 0x00200000 // kernel physical address: 2M
@@ -34,9 +35,12 @@
 #define KERN_STACK_SIZE 16 // 16M
 
 #define FREE_MEM_PHY_ST 0x01200000 // free physical memory start address
-#define FREE_MEM_PHY_ED 0x1EEFFFFF // free physical memory end address
+#define FREE_MEM_PHY_ED 0x1EEFFFFF // free physical memory end address, inclusively
 
 #define DEVICE_MEM_PHY_ST 0xE0000000
-#define DEVICE_MEM_PHY_ED 0xFFFFFFFF
+#define DEVICE_MEM_PHY_ED 0xFFFFFFFF // inclusively
+
+#define PAGE_SIZE 0x1000 // 4KB per page
+#define PAGE_SHIFT 12
 
 #endif
