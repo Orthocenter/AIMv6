@@ -53,6 +53,7 @@ KERN_OBJS     = kern/arch/$(ARCH)/init/cpu.o \
                kern/arch/$(ARCH)/init/l1cache.o \
                kern/arch/$(ARCH)/init/mmu.o \
                kern/arch/$(ARCH)/init/except.o \
+               kern/arch/$(ARCH)/$(MACH)/init/scu.o \
                kern/arch/$(ARCH)/$(MACH)/init/l2cache.o \
                drivers/serial/uart.o \
                drivers/serial/uart-zynq7000.o \

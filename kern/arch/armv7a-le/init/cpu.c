@@ -18,6 +18,7 @@
 #include "l1cache.h"
 #include "except.h"
 #include "../zynq7000/init/l2cache.h"
+#include "../zynq7000/init/scu.h"
 #include "asm/except.h"
 #include "asm/mem.h"
 #include <drivers/serial/uart.h>
@@ -85,6 +86,9 @@ void init_cpu() {
 	//  0.2
 	uart_spin_puts("CPU: invalidating l1 cache, TLB, branch preditor array\r\n");
 	inval_l1cache();
+
+    uart_spin_puts("CPU: enabling SCU\r\n");
+    enable_SCU();
 
 	// 2.
 	uart_spin_puts("CPU: enabling l2 cache\r\n");
