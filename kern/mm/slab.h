@@ -11,11 +11,12 @@ typedef struct cache_t {
 	struct cache_t *next;
 } cache_t;
 
+static u32 cache_size[POOL_NUM];
+static u32 cache_shift[POOL_NUM];
+static cache_t *pools[POOL_NUM];
 
-extern const u32 cache_size[POOL_NUM];
-extern const u32 cache_shift[POOL_NUM];
-cache_t *pools[POOL_NUM];
-
+u32* get_cache_size();
+u32* get_cache_shift();
 void init_slabs();
 
 void* alloc_obj(u32 obj_size);

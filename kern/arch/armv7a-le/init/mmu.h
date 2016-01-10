@@ -9,6 +9,7 @@
 #define KERN_ATTR (u32)0x402
 
 void prepare_first_page_table();
+void remove_direct_map();
 void setup_TTB();
 void enable_MMU();
 

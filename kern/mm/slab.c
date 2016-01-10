@@ -1,8 +1,20 @@
 #include "slab.h"
 #include "kern/mm/page.h"
 
-const u32 cache_size[POOL_NUM] = {4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
-const u32 cache_shift[POOL_NUM] = {2, 3, 4,  5,  6,   7,   8,   9,   10,   11};
+static u32 cache_size[POOL_NUM] = {4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
+static u32 cache_shift[POOL_NUM] = {2, 3, 4,  5,  6,   7,   8,   9,   10,   11};
+
+u32* get_cache_size() {
+	return cache_size;
+}
+
+u32* get_cache_shift() {
+	return cache_shift;
+}
+
+cache_t** get_pools() {
+	return pools;
+}
 
 void insert_slab(u32 pool_id, u8* addr) {
 	for(u8 *cache = addr + (SLAB_SIZE << PAGE_SHIFT) - cache_size[pool_id];

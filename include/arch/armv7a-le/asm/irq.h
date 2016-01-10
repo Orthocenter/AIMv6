@@ -41,6 +41,8 @@
 #define ICC_PHYSBASE	(MPCORE_PHYSBASE + 0x0100)
 #define ICD_PHYSBASE	(MPCORE_PHYSBASE + 0x1000)
 
+#define mpcore_base MPCORE_PHYSBASE
+
 /* FIXME is it good using macros here? */
 #define icc_base	(mpcore_base + 0x0100)
 #define icd_base	(mpcore_base + 0x1000)
@@ -81,15 +83,15 @@ static inline void icc_disable()
 	out32(icc_base + ICC_ICR_OFFSET, 0x0);
 }
 
-static inline void icd_enable()
-{
-	out32(icd_base + ICD_IDR_OFFSET, 0x1);
-}
-
-static inline void icd_disable()
-{
-	out32(icd_base + ICD_IDR_OFFSET, 0x0);
-}
+//static inline void icd_enable()
+//{
+//	out32(icd_base + ICD_IDR_OFFSET, 0x1);
+//}
+//
+//static inline void icd_disable()
+//{
+//	out32(icd_base + ICD_IDR_OFFSET, 0x0);
+//}
 
 static inline void irq_enable()
 {

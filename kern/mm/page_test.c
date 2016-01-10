@@ -3,7 +3,11 @@
 #include "asm/mem.h"
 
 void page_test() {
+	mblock_t *freelist = get_freelist();
 	uart_spin_puts("MM/page: start page test\r\n");
+	uart_spin_puts("address of freelist: ");
+	uart_spin_puthex(&freelist);
+
 	uart_spin_puts("MM/page: first block size: ");
 	uart_spin_puthex(freelist->size);
 	u32 original_size = freelist->size;

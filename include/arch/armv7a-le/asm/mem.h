@@ -34,6 +34,10 @@
 #define KERN_STACK_PHY 0x1FEFFFFC // kernel stack physical address: 511M
 #define KERN_STACK_SIZE 16 // 16M
 
+// #define SYS_STACK KERN_STACK
+#define SVC_STACK 0xDF0FFFFC // SVC_STACK - 15M, size=64K
+#define IRQ_STACK 0xDF0EFFFC // IRQ_STACK - 15M - 64K, size=64K
+
 #define FREE_MEM_PHY_ST 0x01200000 // free physical memory start address
 #define FREE_MEM_PHY_ED 0x1EEFFFFF // free physical memory end address, inclusively
 

@@ -10,7 +10,7 @@ typedef struct mblock_t{
 	u32 size;
 }mblock_t;
 
-mblock_t *freelist;
+static mblock_t *freelist;
 
 void init_pages();
 /* 

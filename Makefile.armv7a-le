@@ -27,7 +27,7 @@ OBJCOPY		=  $(CROSS_COMPILE)objcopy
 INCFLAG		=  -I. -I./include -I./include/arch/$(ARCH)
 INCFLAG		+= -I./include/arch/$(ARCH)/asm/mach-$(MACH)
 
-CFLAGS		=  -Wall -fno-builtin -nostdinc -nostdlib -march=armv7-a
+CFLAGS		=  -Wall -fno-builtin -nostdinc -nostdlib -march=armv7-a -fPIC
 CFLAGS		+= -mlittle-endian $(INCFLAG) -DMACH_$(UPPERMACH)
 
 LDFLAGS		=  -EL -O -N
@@ -48,17 +48,22 @@ FIRMWARE_M4	=  firmware/arch/$(ARCH)/firmware.m4 \
 
 MBR_OBJS	=  boot/arch/$(ARCH)/$(MACH)/bootmain.o
 
-KERN_OBJS	=  kern/arch/$(ARCH)/init/cpu.o \
-			   kern/arch/$(ARCH)/init/l1cache.o \
-			   kern/arch/$(ARCH)/init/mmu.o \
-			   kern/arch/$(ARCH)/$(MACH)/init/l2cache.o \
-			   drivers/serial/uart.o \
-			   drivers/serial/uart-zynq7000.o \
+# place platform-related init code at low address
+KERN_OBJS     = kern/arch/$(ARCH)/init/cpu.o \
+               kern/arch/$(ARCH)/init/l1cache.o \
+               kern/arch/$(ARCH)/init/mmu.o \
+               kern/arch/$(ARCH)/init/except.o \
+               kern/arch/$(ARCH)/$(MACH)/init/l2cache.o \
+               drivers/serial/uart.o \
+               drivers/serial/uart-zynq7000.o \
 			   kern/init/main.o \
 			   kern/mm/page.o \
 			   kern/mm/page_test.o \
 			   kern/mm/slab.o \
 			   kern/mm/slab_test.o \
+			   kern/except/vector.o \
+			   kern/except/handler.o \
+			   kern/except/handler_test.o \
 			   kern/test/test.o
 
 all: firmware.bin mbr.bin kern.bin
@@ -78,7 +83,7 @@ $(MBR_OBJS): EXTRA_CFLAGS := -Os
 mbr.elf: $(MBR_OBJS) boot/arch/$(ARCH)/$(MACH)/mbr.ld
 	$(LD) $(LDFLAGS) -T boot/arch/$(ARCH)/$(MACH)/mbr.ld -o $@ $^
 
-$(KERN_OBJS): EXTRA_CFLAGS := -O0
+$(KERN_OBJS): EXTRA_CFLAGS := -O0 -ggdb
 
 kern.elf: $(KERN_OBJS) kern/arch/$(ARCH)/kern.ld
 	$(LD) $(LDFLAGS) -T kern/arch/$(ARCH)/kern.ld -o $@ $^

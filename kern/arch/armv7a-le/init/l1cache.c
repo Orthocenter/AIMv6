@@ -7,7 +7,8 @@ void inval_l1cache() {
 		"MCR P15, 0, R0, C7, C5, 0;" // invalidate I-cache
 		"MCR P15, 0, R0, C7, C5, 6;" // invalidate branch predictor array
 		"MCR P15, 0, R11, C7, C14, 2;" // invalidate D-cache
-		"DSB" // ensure completion of the l1 inval
+		"DSB;" // ensure completion of the l1 inval
+        "ISB;"
 		:
 		:
 		:

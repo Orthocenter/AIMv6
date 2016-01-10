@@ -8,7 +8,7 @@
 void inval_l2cache() {
 	// -1.
 	u32 *L2CC_ENABLE = L2CC_BASE_ADDR + 0x100;
-	L2CC_ENABLE = 0;
+	*L2CC_ENABLE = 0;
 
 	// 0.
 	u32 *unknown_r = 0xF8000A1C; // unknown system level control register, UG585 1585
@@ -33,5 +33,5 @@ void init_interrupts() {}
 
 void enable_l2cache() {
 	u32 *L2CC_ENABLE = L2CC_BASE_ADDR + 0x100;
-	L2CC_ENABLE = 1;
+	*L2CC_ENABLE = 1;
 }

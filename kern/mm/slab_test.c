@@ -11,6 +11,10 @@ u32 get_cache_num(cache_t *cache) {
 }
 
 void slab_test() {
+	u32* cache_shift = get_cache_shift();
+	u32* cache_size = get_cache_size();
+	cache_t** pools = get_pools();
+
 	uart_spin_puts("MM/slab: slab test begin\r\n");
 	
 	u32 cache_num[POOL_NUM];

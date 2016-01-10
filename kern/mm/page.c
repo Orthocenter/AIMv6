@@ -1,7 +1,13 @@
 #include "page.h"
 #include <drivers/serial/uart.h>
 
+mblock_t* get_freelist() {
+	return freelist;
+}
+
 void init_pages() {
+	uart_spin_puts("address of freelist: ");
+	uart_spin_puthex(&freelist);
 	mblock_t *first_block = (mblock_t*)(KERN_BASE + FREE_MEM_PHY_ST);
 	freelist = first_block;
 

@@ -13,6 +13,8 @@
 #include "kern/mm/page_test.h"
 #include "kern/mm/slab.h"
 #include "kern/mm/slab_test.h"
+#include "kern/except/handler.h"
+#include "kern/except/handler_test.h"
 
 int start_kernel(void)
 {
@@ -23,6 +25,8 @@ int start_kernel(void)
 
 	init_slabs();
 	slab_test();
+
+    handler_test();
 
 	while(1);
 }
