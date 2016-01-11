@@ -20,10 +20,19 @@
 #include "../zynq7000/init/l2cache.h"
 #include "../zynq7000/init/scu.h"
 #include "asm/except.h"
+#include "asm/irq.h"
 #include "asm/mem.h"
 #include <drivers/serial/uart.h>
+#include <drivers/clock/gtc-a9mpcore.h>
 
 void init_cpu() {
+    static u64 gtc;
+    gtc = gtc_get_time();
+    uart_spin_puts("current gtc (H): ");
+    uart_spin_puthex(gtc >> 32);
+    uart_spin_puts("current gtc (L): ");
+    uart_spin_puthex(gtc & 0xFFFFFFFF);
+
 	// 0.
 	//  0.1
 	//  reason for the order, see L2C-310 3-26
@@ -129,6 +138,39 @@ void init_cpu() {
 	// 5. 
 	uart_spin_puts("CPU: setting up interrupt handlers\r\n");
     init_handler();
+
+    // 6. enable IRQ
+
+
+    // CPU interface:
+
+    // enables the signaling of interrupts by the CPU interface
+    // to the connected processor
+    icc_enable();
+
+    // set priority filter
+    // Only interrupts with higher priority than the value 
+    // in this register are signaled to the processor
+    // (Higher priority corresponds to a lower Priority field value)
+    out32(icc_base + ICC_PMR_OFFSET, 0xFF);
+
+    // Distributor:
+
+    // enables the forwarding of pending interrupts 
+    // from the Distributor to the CPU interfaces
+    icd_enable();
+
+    // enable irq and interrupt (set in CPSR)
+    irq_enable();
+    interrupt_enable();
+
+    enable_gtc_interrupt();
+
+    gtc = gtc_get_time();
+    uart_spin_puts("current gtc (H): ");
+    uart_spin_puthex(gtc >> 32);
+    uart_spin_puts("current gtc (L): ");
+    uart_spin_puthex(gtc & 0xFFFFFFFF);
 
 	// final.
 	uart_spin_puts("CPU: jumping to entry of kernel\r\n");

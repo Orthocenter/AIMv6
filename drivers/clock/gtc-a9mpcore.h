@@ -22,6 +22,8 @@
 #endif /* KERNEL */
 
 u64 gtc_get_time();
+void enable_gtc_interrupt();
+void set_gtc_comparator();
 
 /*
  * ticks per second.

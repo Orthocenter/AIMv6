@@ -57,6 +57,7 @@ KERN_OBJS     = kern/arch/$(ARCH)/init/cpu.o \
                kern/arch/$(ARCH)/$(MACH)/init/l2cache.o \
                drivers/serial/uart.o \
                drivers/serial/uart-zynq7000.o \
+			   drivers/clock/gtc-a9mpcore.o \
 			   kern/init/main.o \
 			   kern/mm/page.o \
 			   kern/mm/page_test.o \

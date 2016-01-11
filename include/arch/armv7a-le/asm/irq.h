@@ -73,6 +73,16 @@
 #define ICD_ICFR_OFFSET	0xC00	/* 64 * u32 regs */
 #define ICD_SGIR_OFFSET	0xF00
 
+static inline void end_of_irq(u32 id)
+{
+	out32(icc_base + ICC_EOIR_OFFSET, id);
+}
+
+static inline u32 get_irq_id()
+{
+	return in32(icc_base + ICC_IAR_OFFSET) & 0x3FF;
+}
+
 static inline void icc_enable()
 {
 	out32(icc_base + ICC_ICR_OFFSET, 0x1);
@@ -83,15 +93,15 @@ static inline void icc_disable()
 	out32(icc_base + ICC_ICR_OFFSET, 0x0);
 }
 
-//static inline void icd_enable()
-//{
-//	out32(icd_base + ICD_IDR_OFFSET, 0x1);
-//}
-//
-//static inline void icd_disable()
-//{
-//	out32(icd_base + ICD_IDR_OFFSET, 0x0);
-//}
+static inline void icd_enable()
+{
+	out32(icd_base + ICD_DCR_OFFSET, 0x1);
+}
+
+static inline void icd_disable()
+{
+	out32(icd_base + ICD_DCR_OFFSET, 0x0);
+}
 
 static inline void irq_enable()
 {

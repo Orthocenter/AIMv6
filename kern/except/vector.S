@@ -6,6 +6,7 @@ intp_table:
     B SWI_handler
     NOP // prefetch abort
     NOP // data abort
+    NOP // undefined
     B IRQ_handler
     NOP // FIQ
 
