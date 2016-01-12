@@ -2,8 +2,6 @@
 #include <drivers/serial/uart.h>
 
 void set_L1_PT_sec(u32 *entry, u32 sec_base, u32 attr) {
-	// 0x402:
-	// NS 0, nG 0, S 0, AP[2:0] 001, TEX[2:0] 000, Domain 0000
 	*entry = (sec_base << 20) | attr;
 }
 

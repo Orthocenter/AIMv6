@@ -12,4 +12,8 @@ SECTIONS
 		drivers/serial/uart-zynq7000.o
 		*.o
 	}
+
+	test 10M : {
+		kern/test/test_user_helloworld.o
+	}
 }

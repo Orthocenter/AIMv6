@@ -63,10 +63,16 @@ KERN_OBJS     = kern/arch/$(ARCH)/init/cpu.o \
 			   kern/mm/page_test.o \
 			   kern/mm/slab.o \
 			   kern/mm/slab_test.o \
+			   kern/mm/upgtbl.o \
 			   kern/except/vector.o \
 			   kern/except/handler.o \
 			   kern/except/handler_test.o \
-			   kern/test/test.o
+			   kern/sched/sched_cpu.o \
+			   kern/sched/proc.o \
+			   kern/sched/scheduler.o \
+			   kern/syscall/syscall.o \
+			   kern/test/test.o \
+			   kern/test/test_user_helloworld.o
 
 all: firmware.bin mbr.bin kern.bin
 

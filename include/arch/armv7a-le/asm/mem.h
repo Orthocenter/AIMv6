@@ -37,6 +37,10 @@
 // #define SYS_STACK KERN_STACK
 #define SVC_STACK 0xDF0FFFFC // SVC_STACK - 15M, size=64K
 #define IRQ_STACK 0xDF0EFFFC // IRQ_STACK - 15M - 64K, size=64K
+#define SVC_STACK1 0xDF0DFFFC 
+#define IRQ_STACK1 0xDF0CFFFC 
+#define SCHED_STACK0 0xDF0BFFFC 
+#define SCHED_STACK1 0xDF0AFFFC 
 
 #define FREE_MEM_PHY_ST 0x01200000 // free physical memory start address
 #define FREE_MEM_PHY_ED 0x1EEFFFFF // free physical memory end address, inclusively

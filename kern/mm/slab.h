@@ -5,7 +5,7 @@
 #include "asm/mem.h"
 
 #define SLAB_SIZE 4 // amount of pages by which a cache pool can grow
-#define POOL_NUM 10
+#define POOL_NUM 11
 
 typedef struct cache_t {
 	struct cache_t *next;

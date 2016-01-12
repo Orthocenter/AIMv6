@@ -15,6 +15,10 @@
 #include "kern/mm/slab_test.h"
 #include "kern/except/handler.h"
 #include "kern/except/handler_test.h"
+#include "kern/sched/proc.h"
+#include "kern/sched/sched_cpu.h"
+#include "kern/sched/scheduler.h"
+#include <asm/mem.h>
 
 int start_kernel(void)
 {
@@ -26,7 +30,23 @@ int start_kernel(void)
 	init_slabs();
 	slab_test();
 
-    handler_test();
+    // handler_test();
+
+    init_procs();
+
+    proc_t *proc = create_proc(); 
+    proc->state = RUNNABLE;
+
+    cpu_t *c = get_cpu(); 
+    context_t *sched = alloc_obj(sizeof(context_t));
+    c->sched = sched;
+
+    sched->r[12] = sched->r[13] = SCHED_STACK0;
+    sched->r[14] = start_scheduler;
+    sched->ttb = KERN_TTB_BASE;
+    sched->cpsr = 0b0111011111;
+
+    switch_to(sched);
 
 	while(1);
 }
