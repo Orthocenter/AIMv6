@@ -60,7 +60,7 @@ void init_cpu() {
         "DSB;"
         "ISB"
         :
-        :"r"(KERN_BASE - KERN_BASE_PHY)
+        :"r"(KERN_BASE)
     );
 
     uart_spin_puts("current pc = ");
@@ -109,7 +109,6 @@ void init_cpu() {
     
     uart_spin_puts("CPU: Trying to write to ");
     u32 *test = KERN_STACK;
-    uart_spin_puthex(333);
     uart_spin_puthex(test-3);
     *(test-3) = *(test-3);
     uart_spin_puts("CPU: Trying to write to ");

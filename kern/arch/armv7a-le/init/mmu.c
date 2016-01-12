@@ -38,7 +38,7 @@ void prepare_first_page_table() {
 	uart_spin_puts("MMU: mapping KERN_BASE + phy -> phy\r\n");
 	for (u32 i = 0; i < MEM_SIZE; i++) {
 		u32 *entry = TTB + ((KERN_BASE + (i << 20)) >> 20);
-		u32 *phy = (KERN_BASE_PHY + (i << 20)) >> 20;
+		u32 *phy = i;
 
 #ifdef DEBUG_VERBOSE
 		uart_spin_puts("mapping ");

@@ -14,8 +14,8 @@
 
 /* Virtual memeory space layout
  * 0		..	2G			free space
- * 2G		..	2G+16M		kernel
- * 2G+16M-16K.	2G+16M		l1 page table of kernel
+ * 2G+2M	..	2G+18M		kernel
+ * 2G+18M-16K.	2G+18M		l1 page table of kernel
  * 
  * 4G-528M	..	4G-512M		kernel stack
  * 4G-512M	..	4G			Device
@@ -27,7 +27,7 @@
 #define KERN_BASE_PHY 0x00200000 // kernel physical address: 2M
 #define KERN_SIZE 16 // 16M
 
-#define KERN_TTB_BASE 0x80FFC000 // kernel tranlation table base: 2G+16M-16K
+#define KERN_TTB_BASE 0x811FC000 // kernel tranlation table base: 2G+18M-16K
 #define KERN_TTB_BASE_PHY 0x011FC000 // kernel ttb physical address: 18M-16K
 
 #define KERN_STACK 0xDFFFFFFC // kernel stack: 4G-512M -> 4G-512M-16M

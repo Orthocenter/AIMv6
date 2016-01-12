@@ -46,8 +46,10 @@ void set_sp(u32 mode, u32 ret_mode, u32 sp) {
 void init_handler() {
     // set vector table base
     asm volatile(
-        "ldr r0, =0x80000000;"
+        "mov r0, %0;"
         "mcr p15, 0, r0, c12, c0, 0"
+        :
+        :"r"(KERN_BASE + KERN_BASE_PHY)
     );
 
     // set IRQ SP
