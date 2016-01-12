@@ -21,30 +21,62 @@ void switch_to(const context_t *ctx) {
 		:"r0"
 	);
 
-	// load saved CPSR to SPSR
-	asm volatile(
-		"MSR SPSR, %0"
+	// load banked R13 R14
+	asm volatile(		
+		"MOV R0, %0;"
+		"LDMFD R0, {R13-R14}" 
 		:
-		:"r"(cpu->next_context.cpsr)
+		:"r"(cpu->next_context.r+13)
 		:
 	);
 
-	// restore R0-R14 
-	asm volatile(
+	// switch to SVC mode
+ 	asm volatile(
+        "MRS R12, CPSR;"
+        "BIC R12, R12, #0x1F;"
+        "ORR R12, R12, %0;"
+        "MSR CPSR_c, R12"
+        :
+        :"r"(0b10011)
+    );
+
+ 	// save next_context.cpsr to spsr for further restoring
+    asm volatile (
+    	"MSR SPSR, %0;"
+    	:
+    	:"r"(cpu->next_context.cpsr)
+    	:
+    );
+
+    // load next_context.r[PC] to LR
+    asm volatile(
+    	"MOV r0, %0;"
+    	"LDMFD R0, {R14}"
+    	:
+    	:"r"(cpu->next_context.r+15)
+    	:
+    );
+
+    // load general registers
+	asm volatile(		
 		"MOV R0, %0;"
-		"LDMFD R0, {R0-R14}" // CHECK IF R0 IS RIGHT
+		"LDMFD R0, {R0-R12}"
 		:
 		:"r"(cpu->next_context.r)
 		:
 	);
 
-	// jump to saved PC and change MODE
+	// jump to next_context.PC and restore CPSR
 	asm volatile(
-		"MOVS PC, R14":::
+		"MOVS PC, LR"
 	);
 }
 
-void start_scheduler() {
+void* get_start_scheduler() {
+	return start_scheduler;
+}
+
+static void start_scheduler() {
 	context_t *sched = (get_cpu())->scheduler;
 
 	proc_t *procs = get_procs();
@@ -55,14 +87,22 @@ void start_scheduler() {
 			procs[i].state = RUNNING;
 			// TODO: unlock
 
+			// save CPSR
 			asm volatile(
 				"MOV R0, %0;"
-				"STMFD R0, {R0-R13};"
 				"MRS R0, CPSR;"
 				"STR R0, [%0];"
-				"STR PC, [%0, #56]"
 				:
 				:"r"(sched)
+				:"r0"
+			);
+			//save R0 - R0-R15
+			asm volatile(
+				"MOV R0, %0;"
+				"STMFD R0, {R0-R14};"
+				"STR PC, [%0, #60]" // point to the instruction after switch_to
+				:
+				:"r"(sched->r)
 				:"r0"
 			);
 

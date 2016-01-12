@@ -4,6 +4,7 @@
 #include "context.h"
 
 void switch_to(const context_t *ctx);
-void start_scheduler();
+static void start_scheduler();
+void* get_start_scheduler();
 
 #endif // _KERN_SCHED_SCHEDULER

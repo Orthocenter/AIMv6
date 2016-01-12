@@ -34,8 +34,8 @@ proc_t *create_proc() {
 
 	proc->context = alloc_obj(sizeof(context_t));
 	proc->context->cpsr = DEFAULT_PROC_CPSR;
-	proc->context->r[13] = proc->context->r[12] = DEFAULT_PROC_USER_STACK;
-	proc->context->r[14] = 0x00000000;
+	proc->context->r[13] = proc->context->r[11] = DEFAULT_PROC_USER_STACK;
+	proc->context->r[15] = 0x00000000;
 	proc->context->ttb = proc->ttb;
 
 	proc->killed = 0;

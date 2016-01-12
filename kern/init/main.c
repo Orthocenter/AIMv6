@@ -25,26 +25,39 @@ int start_kernel(void)
 	uart_spin_puts("Hello from kernel!\r\n");
 	
 	init_pages();
-	page_test();
+//	page_test();
 
 	init_slabs();
-	slab_test();
+	//slab_test();
 
     // handler_test();
 
+    uart_spin_puts("PROCS : init begin \r\n");
+
     init_procs();
 
+    uart_spin_puts("PROCS : init finished \r\n");
+
+    uart_spin_puts("PROCS : create_proc \r\n");
+
     proc_t *proc = create_proc(); 
+
+    uart_spin_puts("PROCS : create_proc finished \r\n");
+
     proc->state = RUNNABLE;
 
     cpu_t *c = get_cpu(); 
     context_t *sched = alloc_obj(sizeof(context_t));
-    c->sched = sched;
+    c->scheduler = sched;
 
-    sched->r[12] = sched->r[13] = SCHED_STACK0;
-    sched->r[14] = start_scheduler;
+    sched->r[11] = sched->r[13] = SCHED_STACK0;
+    sched->r[14] = 0;
+    sched->r[15] = get_start_scheduler();
+    uart_spin_puthex(get_start_scheduler());
     sched->ttb = KERN_TTB_BASE;
     sched->cpsr = 0b0111011111;
+
+    uart_spin_puts("SCHED : sheduling\r\n");
 
     switch_to(sched);
 

@@ -10,7 +10,7 @@ void run_elf(u32 elf_lba) {
     volatile u8 *elf_header = (void *)ELF_BASE;
     sd_dma_spin_read(elf_header, 1, elf_lba);
 
-    void (*kernel_entry)() = (void *)load_u32(elf_header + 0x18);
+    void (*kernel_entry)() = (void *)(load_u32(elf_header + 0x18) - 0x80000000);
 
     u32 e_phentsize = elf_header[0x2B] << 8 | elf_header[0x2A];
     u32 e_phnum = elf_header[0x2D] << 8 | elf_header[0x2C];

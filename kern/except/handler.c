@@ -7,36 +7,30 @@
 #include "kern/syscall/syscall.h"
 #include "kern/sched/scheduler.h"
 
-void change_mode(u32 mode) {
-    int cpsr;
-    asm volatile(
-        "mrs r0, cpsr\r\n"
-        "mov %0, r0" : "=r"(cpsr));
-    uart_spin_puts("CPSR=");
-    uart_spin_puthex(cpsr);
+// this handler is executed after _SWI_handler
+// SEE _SWI_handler for more details
+//
+// this handler runs in SYS mode on kern stack of proc
+// R0 is set to be the bottom of the interrupt stack
+// R1 is previous SP
+// R2 is previous LR
+// R3 is previous PC
 
-    asm volatile(
-        "MRS R0, CPSR;"
-        "BIC R0, R0, #0x1F;"
-        "ORR R0, R0, %0;"
-        "MSR CPSR, R0"
-        :
-        : "r"(mode)
-        : "r0"
-    );
-}
-
-// SYS mode, running on kern stack
 void SWI_handler() {
-    context_t ctx; // saved in the kern stack
+    context_t ctx; // saved in the kern stack of proc
     context_t *ctx_ptr; // saved in the interrupt stack
     asm volatile(
         "STR R1, [R0, #56];" // save user SP to ctx_ptr->r[13]
+        "STR R2, [R0, #60];" // save user LR to ctx_ptr->r[14]
+        "STR R3, [R0, #64];" // save user PC to ctx_ptr->r[15]
         "MOV %0, R0;"
         :"=r"(ctx_ptr)
         :
         :"r0"
     );
+
+    uart_spin_puthex(ctx_ptr->r[1]);
+
     copy_context(&ctx, ctx_ptr);
     
     cpu_t *cpu = get_cpu();
@@ -45,6 +39,8 @@ void SWI_handler() {
     proc->context->ttb = proc->ttb;
 
     u32 ret;
+    uart_spin_puthex(proc->context->r[0]);
+
     switch(proc->context->r[0]) {
         case SBRK:
             uart_spin_puts("sbrk\r\n");
