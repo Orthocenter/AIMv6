@@ -77,15 +77,20 @@ void* get_start_scheduler() {
 }
 
 static void start_scheduler() {
-	context_t *sched = (get_cpu())->scheduler;
-
+	cpu_t *cpu = get_cpu();
+	context_t *sched = cpu->scheduler;
 	proc_t *procs = get_procs();
+
+    async_sleep_msec(10); // schedule every 10 msec
+
 	for(int i = 0; ; i = (i + 1) & (MAX_PROC_NUM - 1)) {
 		// TODO: lock
 		if (procs[i].state == RUNNABLE) {
 			// TODO: set timer
 			procs[i].state = RUNNING;
 			// TODO: unlock
+
+			cpu->proc = procs + i;
 
 			// save CPSR
 			asm volatile(

@@ -29,8 +29,6 @@ void SWI_handler() {
         :"r0"
     );
 
-    uart_spin_puthex(ctx_ptr->r[1]);
-
     copy_context(&ctx, ctx_ptr);
     
     cpu_t *cpu = get_cpu();
@@ -39,31 +37,30 @@ void SWI_handler() {
     proc->context->ttb = proc->ttb;
 
     u32 ret;
-    uart_spin_puthex(proc->context->r[0]);
 
     switch(proc->context->r[0]) {
         case SBRK:
-            uart_spin_puts("sbrk\r\n");
+            uart_spin_puts("syscall: sbrk\r\n");
             ret = syscall_sbrk(proc);
             break;
         case FORK:
-            uart_spin_puts("fork\r\n");
+            uart_spin_puts("syscall: fork\r\n");
             break;
         case EXIT:
-            uart_spin_puts("exit\r\n");
+            uart_spin_puts("syscall: exit\r\n");
             break;
         case WAIT:
-            uart_spin_puts("wait\r\n");
+            uart_spin_puts("syscall: wait\r\n");
             break;
         case SLEEP:
-            uart_spin_puts("sleep\r\n");
+            uart_spin_puts("syscall: sleep\r\n");
             break;
         case PUTS:
-            uart_spin_puts("puts\r\n");
+            uart_spin_puts("syscall: puts\r\n");
             ret = syscall_puts(proc);
             break;
         case PUTHEX:
-            uart_spin_puts("puthex\r\n");
+            uart_spin_puts("syscall: puthex\r\n");
             ret = syscall_puthex(proc);
             break;
         default:
@@ -101,10 +98,15 @@ void IRQ_handler() {
         uart_spin_puthex(gtc >> 32);
         uart_spin_puts("current gtc (L): ");
         uart_spin_puthex(gtc & 0xFFFFFFFF);
+
+        proc->state = RUNNABLE;
+    
+        async_sleep_msec(10); // next round
+
+        end_of_irq(id); // FIXME
+        switch_to(cpu->scheduler);
     } else {
         uart_spin_puts("received an IRQ with id: ");
         uart_spin_puthex(id);
     }
-
-    end_of_irq(id); // FIXME
 }

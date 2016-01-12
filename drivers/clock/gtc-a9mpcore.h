@@ -25,6 +25,8 @@ u64 gtc_get_time();
 void enable_gtc_interrupt();
 void set_gtc_comparator();
 
+void async_sleep_msec(u64 msec);
+
 /*
  * ticks per second.
  * Zynq7000 is an APSoC and it's got a LOT of clocks.

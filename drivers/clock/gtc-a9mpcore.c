@@ -81,6 +81,10 @@ u64 gtc_get_time()
 	return time;
 }
 
+void async_sleep_msec(u64 msec) {
+	set_gtc_comparator(gtc_get_time() + msec * GTC_TPUS * 1000);
+}
+
 void sleep(int sec)
 {
 	u64 time, time1;
